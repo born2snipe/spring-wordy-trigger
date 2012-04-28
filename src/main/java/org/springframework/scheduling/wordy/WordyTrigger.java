@@ -14,14 +14,47 @@
 
 package org.springframework.scheduling.wordy;
 
-import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.scheduling.Trigger;
+import org.springframework.scheduling.TriggerContext;
+import org.springframework.scheduling.support.CronSequenceGenerator;
 
-public class WordyTrigger extends CronTrigger {
-    public WordyTrigger(String wordyExpression) {
-        this(new WordyExpression(wordyExpression));
+import java.util.Date;
+import java.util.TimeZone;
+
+public class WordyTrigger implements Trigger, InitializingBean {
+    private CronSequenceGenerator sequenceGenerator;
+    private String expression;
+    private TimeZone timeZone = TimeZone.getDefault();
+
+    public Date nextExecutionTime(TriggerContext triggerContext) {
+        Date date = triggerContext.lastCompletionTime();
+        if (date != null) {
+            Date scheduled = triggerContext.lastScheduledExecutionTime();
+            if (scheduled != null && date.before(scheduled)) {
+                // Previous task apparently executed too early...
+                // Let's simply use the last calculated execution time then,
+                // in order to prevent accidental re-fires in the same second.
+                date = scheduled;
+            }
+        } else {
+            date = new Date();
+        }
+        return this.sequenceGenerator.next(date);
     }
 
-    public WordyTrigger(WordyExpression expression) {
-        super(expression.toCron());
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public void afterPropertiesSet() throws Exception {
+        sequenceGenerator = new CronSequenceGenerator(
+                new WordyExpression(expression).toCron(),
+                timeZone
+        );
     }
 }

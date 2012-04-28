@@ -1,24 +1,31 @@
-<project xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>
+<project xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+         xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>b2s</groupId>
-    <artifactId>spring-simple-trigger</artifactId>
+    <artifactId>spring-wordy-trigger</artifactId>
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
-    <name>spring-simple-trigger</name>
-   
-    
-<scm>
-  <developerConnection>scm:git:git://github.com/born2snipe/spring-simple-trigger.git</developerConnection>
-</scm>
+    <name>spring-wordy-trigger</name>
 
- 
+
+    <scm>
+        <developerConnection>scm:git:git://github.com/born2snipe/spring-wordy-trigger.git</developerConnection>
+    </scm>
+
+
     <dependencies>
-    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.0.6.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.7</version>
+            <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
 
@@ -28,34 +35,33 @@
             <version>4.5</version>
             <scope>test</scope>
         </dependency>
-        
-        
-        
+
+
     </dependencies>
 
     <build>
-     <plugins>
+        <plugins>
 
-      <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-compiler-plugin</artifactId>
-       <version>2.3.2</version>       
-       <configuration>
-        <source>1.6</source>
-        <target>1.6</target>
-       </configuration>
-      </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
 
-      <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-surefire-plugin</artifactId>
-       <version>2.6</version>
-       <configuration>
-        <parallel>classes</parallel>
-       </configuration>
-      </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <parallel>classes</parallel>
+                </configuration>
+            </plugin>
 
-      
+
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
@@ -87,37 +93,33 @@
                 </executions>
             </plugin>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.0.4</version>                        
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.0.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
 
-      
-      
-      
-      
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -128,21 +130,8 @@
             </plugin>
 
 
-      
-
-     </plugins>
+        </plugins>
     </build>
 
-  <pluginRepositories>
-
-    
-
-  </pluginRepositories>
-
-  <repositories>
- 
-    
-
-  </repositories>
 </project>
 

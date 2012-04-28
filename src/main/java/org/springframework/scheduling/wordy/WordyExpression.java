@@ -14,12 +14,14 @@
 
 package org.springframework.scheduling.wordy;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.List;
 
 public class WordyExpression {
-    private static final Pattern EVERY_PATTERN = Pattern.compile("every ([0-9]+) (hour|minute|second)", Pattern.CASE_INSENSITIVE);
-    private static final Pattern AT_PATTERN = Pattern.compile("at ([0-9]{1,2}) (am|pm)", Pattern.CASE_INSENSITIVE);
+    private static final List<? extends WordyToCronParser> PARSERS = Arrays.asList(
+            new EverySoOftenParser(),
+            new AtSpecificHourOfDayParser()
+    );
 
     private String expression;
 
@@ -31,10 +33,11 @@ public class WordyExpression {
         try {
             String cronExpression = "";
 
-            if (isMatch(EVERY_PATTERN, expression)) {
-                cronExpression = buildFromEveryExpression();
-            } else {
-                cronExpression = buildFromAtExpression();
+            for (WordyToCronParser parser : PARSERS) {
+                if (parser.isMatch(expression)) {
+                    cronExpression = parser.parse(expression);
+                    break;
+                }
             }
 
             if (cronExpression.trim().length() == 0) {
@@ -47,63 +50,4 @@ public class WordyExpression {
         }
     }
 
-    private String buildFromAtExpression() {
-        StringBuilder cronExpression = new StringBuilder();
-        Matcher matcher = AT_PATTERN.matcher(expression);
-        if (matcher.find()) {
-            int hour = Integer.parseInt(matcher.group(1));
-            SideOfDay sideOfDay = SideOfDay.valueOf(matcher.group(2).toUpperCase());
-            cronExpression.append("0 0 ");
-            cronExpression.append(hour + sideOfDay.hourOffset);
-            cronExpression.append(" * * ?");
-        }
-
-        return cronExpression.toString();
-    }
-
-    private String buildFromEveryExpression() {
-        StringBuilder cronExpression = new StringBuilder();
-        Matcher matcher = EVERY_PATTERN.matcher(expression);
-        if (matcher.find()) {
-            int unitSize = Integer.parseInt(matcher.group(1));
-            Unit unit = Unit.valueOf(matcher.group(2).toUpperCase());
-
-            for (int i = 0; i < Unit.values().length; i++) {
-                if (i == unit.cronPosition) {
-                    cronExpression.append("0/").append(unitSize).append(" ");
-                } else if (i < unit.cronPosition) {
-                    cronExpression.append("0").append(" ");
-                } else {
-                    cronExpression.append("*").append(" ");
-                }
-            }
-
-            cronExpression.append("* * ?");
-        }
-        return cronExpression.toString();
-    }
-
-    private boolean isMatch(Pattern pattern, String wordyExpression) {
-        return pattern.matcher(wordyExpression).find();
-    }
-
-    private static enum SideOfDay {
-        AM(0), PM(12);
-
-        int hourOffset;
-
-        private SideOfDay(int hourOffset) {
-            this.hourOffset = hourOffset;
-        }
-    }
-
-    private static enum Unit {
-        SECOND(0), MINUTE(1), HOUR(2);
-
-        int cronPosition;
-
-        private Unit(int cronPosition) {
-            this.cronPosition = cronPosition;
-        }
-    }
 }

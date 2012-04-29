@@ -81,6 +81,36 @@ public class WordyExpressionTest {
     }
 
     @Test
+    public void atExpression_shouldHandleHourAndMinutesProvidedWithPartOfDay() {
+        assertEquals("0 22 23 * * ?", wordyToCron("at 11:22 pm"));
+    }
+
+    @Test
+    public void atExpression_shouldHandleMidnightProperly() {
+        assertEquals("0 0 0 * * ?", wordyToCron("at 12:00 am"));
+    }
+
+    @Test
+    public void atExpression_shouldHandleNoonProperly() {
+        assertEquals("0 0 12 * * ?", wordyToCron("at 12:00 pm"));
+    }
+
+    @Test
+    public void atExpression_shouldNotRequireTheAmOrPm() {
+        assertEquals("0 22 23 * * ?", wordyToCron("at 23:22"));
+    }
+
+    @Test(expected = BadWordyExpressionException.class)
+    public void atExpression_shouldBlowUpWhenAmAndPmIsGivenForMilitaryTime() {
+        wordyToCron("at 23:22 pm");
+    }
+
+    @Test(expected = BadWordyExpressionException.class)
+    public void atExpression_shouldBlowUpWhenGivenA3DigitMinuteValue() {
+        wordyToCron("at 11:221 pm");
+    }
+
+    @Test
     public void atExpression_shouldIgnoreCase() {
         assertEquals("0 0 13 * * ?", wordyToCron("AT 1 pM"));
     }

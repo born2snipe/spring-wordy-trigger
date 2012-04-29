@@ -18,25 +18,69 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AtSpecificHourOfDayParser implements WordyToCronParser {
-    private static final Pattern AT_PATTERN = Pattern.compile("at ([0-9]{1,2}) (am|pm)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern AT_TIME_PATTERN = Pattern.compile("^at ([0-9]{1,2}):([0-9]{2})( (am|pm))?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern AT_HOUR_PATTERN = Pattern.compile("at ([0-9]{1,2}) (am|pm)", Pattern.CASE_INSENSITIVE);
 
 
     public boolean isMatch(String wordyExpression) {
-        return AT_PATTERN.matcher(wordyExpression).find();
+        return AT_HOUR_PATTERN.matcher(wordyExpression).find()
+                || AT_TIME_PATTERN.matcher(wordyExpression).find();
     }
 
     public String parse(String wordyExpression) {
         StringBuilder cronExpression = new StringBuilder();
-        Matcher matcher = AT_PATTERN.matcher(wordyExpression);
+        String minutes = "0";
+        String hour = "0";
+
+        Matcher matcher = AT_HOUR_PATTERN.matcher(wordyExpression);
         if (matcher.find()) {
-            int hour = Integer.parseInt(matcher.group(1));
-            SideOfDay sideOfDay = SideOfDay.valueOf(matcher.group(2).toUpperCase());
-            cronExpression.append("0 0 ");
-            cronExpression.append(hour + sideOfDay.hourOffset);
-            cronExpression.append(" * * ?");
+            hour = adjustHours(matcher.group(1), matcher.group(2));
+        } else {
+            matcher = AT_TIME_PATTERN.matcher(wordyExpression);
+            if (matcher.find()) {
+                hour = matcher.group(1);
+                minutes = matcher.group(2).replaceAll("0([0-9])", "$1");
+                String sideOfDayStr = matcher.group(4);
+
+                if (Integer.parseInt(hour) > 12 && sideOfDayStr != null) {
+                    throw new IllegalArgumentException("Please do not provide AM or PM when using military time");
+                }
+
+                hour = adjustHours(hour, sideOfDayStr);
+            }
         }
 
+        if (minutes.length() == 3) {
+            throw new IllegalArgumentException("The minutes can not be 3 digits");
+        }
+
+        cronExpression.append("0 ");
+        cronExpression.append(minutes).append(" ").append(hour).append(" ");
+        cronExpression.append("* * ?");
+
         return cronExpression.toString();
+    }
+
+    private String adjustHours(String hour, String sideOfDayStr) {
+        if (sideOfDayStr == null) {
+            return hour;
+        }
+
+        int hours = Integer.parseInt(hour);
+        SideOfDay sideOfDay = SideOfDay.valueOf(sideOfDayStr.toUpperCase());
+
+        if (hours == 12) {
+            switch (sideOfDay) {
+                case AM:
+                    return "0";
+                case PM:
+                    return "12";
+            }
+        }
+
+        hours += sideOfDay.hourOffset;
+        hour = String.valueOf(hours);
+        return hour;
     }
 
     private static enum SideOfDay {

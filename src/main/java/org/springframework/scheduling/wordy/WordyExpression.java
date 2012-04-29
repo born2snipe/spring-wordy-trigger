@@ -41,7 +41,7 @@ public class WordyExpression {
             }
 
             if (cronExpression.trim().length() == 0) {
-                throw new BadWordyExpressionException(expression);
+                throw new IllegalStateException("Could not convert the wordy expression to a valid CRON expression");
             }
 
             return cronExpression;

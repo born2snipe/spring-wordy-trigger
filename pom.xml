@@ -133,5 +133,13 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>b2s-repo</id>
+            <url>dav:https://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
+            <uniqueVersion>true</uniqueVersion>
+        </repository>
+    </distributionManagement>
+
 </project>
 

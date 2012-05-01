@@ -14,8 +14,9 @@ Example expressions:
 
 Example bean configuration:
 
-    <bean class="org.springframework.scheduling.wordy.WordyTrigger">
-        <property name="expression" value="every 10 minutes" />
+     <bean id="trigger" class="org.springframework.scheduling.wordy.WordyTriggerBean">
+        <property name="expression" value="every 1 second"/>
+        <property name="jobDetail" ref="jobDetail"/>
     </bean>
 
 Available units for the "every" syntax:

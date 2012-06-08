@@ -21,12 +21,25 @@ public class WordyTriggerBean extends CronTriggerBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        WordyExpression wordyExpression = new WordyExpression(expression);
-        super.setCronExpression(wordyExpression.toCron());
+        if (isBlank(expression) && isBlank(getCronExpression())) {
+            throw new IllegalArgumentException("No expression given");
+        } else if (!isBlank(expression) && !isBlank(getCronExpression())) {
+            throw new IllegalArgumentException("You provided a CRON expression and a Wordy expression. Please pick one or the other.");
+        }
+
+        if (!isBlank(expression)) {
+            WordyExpression wordyExpression = new WordyExpression(expression);
+            super.setCronExpression(wordyExpression.toCron());
+        }
+
         super.afterPropertiesSet();
     }
 
     public void setExpression(String expression) {
         this.expression = expression;
+    }
+
+    private boolean isBlank(String expression) {
+        return expression == null || expression.trim().length() == 0;
     }
 }

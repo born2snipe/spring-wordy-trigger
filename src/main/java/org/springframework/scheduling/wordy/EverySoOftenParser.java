@@ -25,25 +25,29 @@ public class EverySoOftenParser implements WordyToCronParser {
     }
 
     public String parse(String wordyExpression) {
-        StringBuilder cronExpression = new StringBuilder();
+        CronBuilder cron = new CronBuilder();
         Matcher matcher = EVERY_PATTERN.matcher(wordyExpression);
         if (matcher.find()) {
-            int unitSize = Integer.parseInt(matcher.group(1));
+            String unitSize = matcher.group(1);
             TimeUnit unit = TimeUnit.valueOf(matcher.group(2).toUpperCase());
 
-            for (int i = 0; i < TimeUnit.values().length; i++) {
-                if (i == unit.cronPosition) {
-                    cronExpression.append("0/").append(unitSize).append(" ");
-                } else if (i < unit.cronPosition) {
-                    cronExpression.append("0").append(" ");
+            cron.second("0");
+            if (unit == TimeUnit.SECOND) {
+                cron.interval(unitSize);
+            } else {
+                cron.minute("0");
+                if (unit == TimeUnit.MINUTE) {
+                    cron.interval(unitSize);
                 } else {
-                    cronExpression.append("*").append(" ");
+                    cron.hour("0");
+                    if (unit == TimeUnit.HOUR) {
+                        cron.interval(unitSize);
+                    }
                 }
             }
 
-            cronExpression.append("* * ?");
         }
-        return cronExpression.toString();
+        return cron.toString();
 
     }
 

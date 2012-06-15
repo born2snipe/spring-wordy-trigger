@@ -28,7 +28,6 @@ public class AtSpecificHourOfDayParser implements WordyToCronParser {
     }
 
     public String parse(String wordyExpression) {
-        StringBuilder cronExpression = new StringBuilder();
         String minutes = "0";
         String hour = "0";
 
@@ -54,11 +53,9 @@ public class AtSpecificHourOfDayParser implements WordyToCronParser {
             throw new IllegalArgumentException("The minutes can not be 3 digits");
         }
 
-        cronExpression.append("0 ");
-        cronExpression.append(minutes).append(" ").append(hour).append(" ");
-        cronExpression.append("* * ?");
-
-        return cronExpression.toString();
+        CronBuilder cron = new CronBuilder();
+        cron.second("0").minute(minutes).hour(hour);
+        return cron.toString();
     }
 
     private String adjustHours(String hour, String sideOfDayStr) {

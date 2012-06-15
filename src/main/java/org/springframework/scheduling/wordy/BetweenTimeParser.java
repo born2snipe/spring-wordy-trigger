@@ -36,31 +36,24 @@ public class BetweenTimeParser implements WordyToCronParser {
         TimeUnit unit = TimeUnit.valueOf(matcher.group(intervalUnitGroup).toUpperCase());
         String interval = matcher.group(intervalGroup);
 
-        StringBuilder cron = new StringBuilder();
+        CronBuilder cron = new CronBuilder();
+
+        cron.second("0");
         if (unit == TimeUnit.SECOND) {
-            cron.append("0/").append(interval);
-        } else {
-            cron.append("0");
+            cron.interval(interval);
         }
-        cron.append(" ");
+
 
         if (unit == TimeUnit.MINUTE) {
-            cron.append("0/").append(interval).append(" ");
-        } else {
-            if (unit == TimeUnit.SECOND) {
-                cron.append("*");
-            } else {
-                cron.append("0");
-            }
-            cron.append(" ");
+            cron.minute("0").interval(interval);
+        } else if (unit != TimeUnit.SECOND) {
+            cron.minute("0");
         }
 
-        cron.append(matcher.group(timeRangeGroup).toLowerCase().replaceAll(" and ", "-"));
+        cron.hour(matcher.group(timeRangeGroup).toLowerCase().replaceAll(" and ", "-"));
         if (unit == TimeUnit.HOUR) {
-            cron.append("/").append(interval);
+            cron.interval(interval);
         }
-
-        cron.append(" * * ?");
 
         return cron.toString();
     }

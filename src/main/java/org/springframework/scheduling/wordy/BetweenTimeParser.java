@@ -18,10 +18,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BetweenTimeParser implements WordyToCronParser {
-    private static final Pattern PATTERN = Pattern.compile("between ([0-9]{1,2}(\\-| and )[0-9]{1,2}) every ([0-9]{1,2}) (minute|second|hour)");
+    private static final Pattern PATTERN = Pattern.compile("between ([0-9]{1,2}(\\-| and )[0-9]{1,2}) every ([0-9]{1,2}) (minute|second|hour)", Pattern.CASE_INSENSITIVE);
 
     public boolean isMatch(String wordyExpression) {
-        return wordyExpression.contains("between");
+        return wordyExpression.toLowerCase().contains("between");
     }
 
     public String parse(String wordyExpression) {
@@ -55,7 +55,7 @@ public class BetweenTimeParser implements WordyToCronParser {
             cron.append(" ");
         }
 
-        cron.append(matcher.group(timeRangeGroup).replaceAll(" and ", "-"));
+        cron.append(matcher.group(timeRangeGroup).toLowerCase().replaceAll(" and ", "-"));
         if (unit == TimeUnit.HOUR) {
             cron.append("/").append(interval);
         }

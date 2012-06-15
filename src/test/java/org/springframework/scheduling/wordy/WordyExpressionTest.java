@@ -24,6 +24,11 @@ import static junit.framework.Assert.assertEquals;
 public class WordyExpressionTest {
 
     @Test
+    public void betweenExpression_shouldBeCaseInsensitive() {
+        assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0 and 10 every 15 minutes".toUpperCase()));
+    }
+
+    @Test
     public void betweenExpression_shouldHandleA_and_insteadOfADash() {
         assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0 and 10 every 15 minutes"));
     }

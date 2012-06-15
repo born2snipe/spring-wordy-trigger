@@ -1,5 +1,7 @@
 Attempt to simplify setting up a timer trigger using just words.
 
+Spring Docs: http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
+
 Example expressions:
 
     Wordy Exp.                                 Cron Exp.

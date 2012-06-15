@@ -29,9 +29,9 @@ public class EverySoOftenParser implements WordyToCronParser {
         Matcher matcher = EVERY_PATTERN.matcher(wordyExpression);
         if (matcher.find()) {
             int unitSize = Integer.parseInt(matcher.group(1));
-            Unit unit = Unit.valueOf(matcher.group(2).toUpperCase());
+            TimeUnit unit = TimeUnit.valueOf(matcher.group(2).toUpperCase());
 
-            for (int i = 0; i < Unit.values().length; i++) {
+            for (int i = 0; i < TimeUnit.values().length; i++) {
                 if (i == unit.cronPosition) {
                     cronExpression.append("0/").append(unitSize).append(" ");
                 } else if (i < unit.cronPosition) {
@@ -45,16 +45,6 @@ public class EverySoOftenParser implements WordyToCronParser {
         }
         return cronExpression.toString();
 
-    }
-
-    private static enum Unit {
-        SECOND(0), MINUTE(1), HOUR(2);
-
-        int cronPosition;
-
-        private Unit(int cronPosition) {
-            this.cronPosition = cronPosition;
-        }
     }
 
 }

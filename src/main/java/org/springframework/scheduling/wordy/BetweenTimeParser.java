@@ -33,21 +33,21 @@ public class BetweenTimeParser implements WordyToCronParser {
         int intervalUnitGroup = 4;
         int timeRangeGroup = 1;
 
-        Unit unit = Unit.valueOf(matcher.group(intervalUnitGroup).toUpperCase());
+        TimeUnit unit = TimeUnit.valueOf(matcher.group(intervalUnitGroup).toUpperCase());
         String interval = matcher.group(intervalGroup);
 
         StringBuilder cron = new StringBuilder();
-        if (unit == Unit.SECOND) {
+        if (unit == TimeUnit.SECOND) {
             cron.append("0/").append(interval);
         } else {
             cron.append("0");
         }
         cron.append(" ");
 
-        if (unit == Unit.MINUTE) {
+        if (unit == TimeUnit.MINUTE) {
             cron.append("0/").append(interval).append(" ");
         } else {
-            if (unit == Unit.SECOND) {
+            if (unit == TimeUnit.SECOND) {
                 cron.append("*");
             } else {
                 cron.append("0");
@@ -56,7 +56,7 @@ public class BetweenTimeParser implements WordyToCronParser {
         }
 
         cron.append(matcher.group(timeRangeGroup).replaceAll(" and ", "-"));
-        if (unit == Unit.HOUR) {
+        if (unit == TimeUnit.HOUR) {
             cron.append("/").append(interval);
         }
 
@@ -65,14 +65,5 @@ public class BetweenTimeParser implements WordyToCronParser {
         return cron.toString();
     }
 
-    private static enum Unit {
-        SECOND(0), MINUTE(1), HOUR(2);
-
-        int cronPosition;
-
-        private Unit(int cronPosition) {
-            this.cronPosition = cronPosition;
-        }
-    }
 
 }

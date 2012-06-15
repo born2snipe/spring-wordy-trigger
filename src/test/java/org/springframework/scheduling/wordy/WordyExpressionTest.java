@@ -15,6 +15,9 @@
 package org.springframework.scheduling.wordy;
 
 import org.junit.Test;
+import org.quartz.CronExpression;
+
+import java.text.ParseException;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -167,7 +170,11 @@ public class WordyExpressionTest {
     }
 
     private String wordyToCron(String expression) {
-        return new WordyExpression(expression).toCron();
+        try {
+            return new CronExpression(new WordyExpression(expression).toCron()).toString();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -9,7 +9,7 @@
         <property name="jobDetail" ref="jobDetail"/>
     </bean>
 
-    <bean id="job" class="org.springframework.scheduling.wordy.StubJob"/>
+    <bean id="job" class="integration.StubJob"/>
 
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="job"/>

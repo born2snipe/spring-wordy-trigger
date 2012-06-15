@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package org.springframework.scheduling.wordy;
+package integration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ import static junit.framework.Assert.assertTrue;
 
 @ContextConfiguration("classpath:contexts/job-config.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class IntegrationTest {
+public class Spring2StyleTest {
     @Autowired
     StubJob job;
 

@@ -19,6 +19,52 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 
 public class WordyExpressionTest {
+
+    @Test
+    public void betweenExpression_shouldHandleA_and_insteadOfADash() {
+        assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0 and 10 every 15 minutes"));
+    }
+
+    @Test
+    public void betweenExpression_shouldHandleHourIntervals() {
+        assertEquals("0 0 0-10/2 * * ?", wordyToCron("between 0-10 every 2 hours"));
+    }
+
+    @Test
+    public void betweenExpression_shouldHandleSecondsIntervals() {
+        assertEquals("0/10 * 0-10 * * ?", wordyToCron("between 0-10 every 10 seconds"));
+    }
+
+    @Test
+    public void betweenExpression_shouldHandleNotPluralFormOfMinutes() {
+        assertEquals("0 0/1 0-10 * * ?", wordyToCron("between 0-10 every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldHandleMilitaryHourRanges() {
+        assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0-10 every 15 minutes"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportBothDoubleDigitHours() {
+        assertEquals("0 0/15 10-12 * * ?", wordyToCron("between 10-12 every 15 minutes"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportBothSingleDigitHours() {
+        assertEquals("0 0/15 0-2 * * ?", wordyToCron("between 0-2 every 15 minutes"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportSingleDigitMinutes() {
+        assertEquals("0 0/1 0-2 * * ?", wordyToCron("between 0-2 every 1 minutes"));
+    }
+
+    @Test(expected = BadWordyExpressionException.class)
+    public void betweenExpression_shouldBlowUpIfNoEveryConditionIsGiven() {
+        wordyToCron("between 0-10");
+    }
+
     @Test
     public void everyExpression_shouldHandleHour() {
         assertEquals("0 0 0/1 * * ?", wordyToCron("every 1 hour"));

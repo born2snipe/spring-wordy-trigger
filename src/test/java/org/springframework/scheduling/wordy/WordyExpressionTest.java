@@ -23,6 +23,41 @@ import static junit.framework.Assert.assertEquals;
 
 public class WordyExpressionTest {
 
+    @Test(expected = BadWordyExpressionException.class)
+    public void betweenExpression_shouldBlowUpIfTheFirstHourHasTheSideOfDayButTheSecondHourDoesNot() {
+        wordyToCron("between 1 am and 10 every 1 minute");
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportNightHourRanges() {
+        assertEquals("0 0/1 12-22 * * ?", wordyToCron("between 12 pm and 10 pm every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportMorningHourRanges() {
+        assertEquals("0 0/1 1-10 * * ?", wordyToCron("between 1 am and 10 am every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldNotForceTheWhitespaceBetweenTheHourAndTheSideOfDay() {
+        assertEquals("0 0/1 1-22 * * ?", wordyToCron("between 1am and 10pm every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportTheTimeOfDayAsPartOfTheRangeForEachHour() {
+        assertEquals("0 0/1 1-22 * * ?", wordyToCron("between 1 am and 10 pm every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldSupportTheTimeOfDayAsPartOfTheRange() {
+        assertEquals("0 0/1 13-22 * * ?", wordyToCron("between 1-10 pm every 1 minute"));
+    }
+
+    @Test
+    public void betweenExpression_shouldHandleHourIntervals() {
+        assertEquals("0 0 0-10/2 * * ?", wordyToCron("between 0-10 every 2 hours"));
+    }
+
     @Test
     public void betweenExpression_shouldBeCaseInsensitive() {
         assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0 and 10 every 15 minutes".toUpperCase()));
@@ -31,11 +66,6 @@ public class WordyExpressionTest {
     @Test
     public void betweenExpression_shouldHandleA_and_insteadOfADash() {
         assertEquals("0 0/15 0-10 * * ?", wordyToCron("between 0 and 10 every 15 minutes"));
-    }
-
-    @Test
-    public void betweenExpression_shouldHandleHourIntervals() {
-        assertEquals("0 0 0-10/2 * * ?", wordyToCron("between 0-10 every 2 hours"));
     }
 
     @Test

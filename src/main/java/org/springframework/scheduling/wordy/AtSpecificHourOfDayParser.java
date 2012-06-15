@@ -65,29 +65,7 @@ public class AtSpecificHourOfDayParser implements WordyToCronParser {
 
         int hours = Integer.parseInt(hour);
         SideOfDay sideOfDay = SideOfDay.valueOf(sideOfDayStr.toUpperCase());
-
-        if (hours == 12) {
-            switch (sideOfDay) {
-                case AM:
-                    return "0";
-                case PM:
-                    return "12";
-            }
-        }
-
-        hours += sideOfDay.hourOffset;
-        hour = String.valueOf(hours);
-        return hour;
-    }
-
-    private static enum SideOfDay {
-        AM(0), PM(12);
-
-        int hourOffset;
-
-        private SideOfDay(int hourOffset) {
-            this.hourOffset = hourOffset;
-        }
+        return String.valueOf(sideOfDay.convertToMilitaryHours(hours));
     }
 
 }

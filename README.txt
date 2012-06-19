@@ -21,6 +21,8 @@ Example expressions:
     every 10 minutes on MON-FRI              => 0 0/10 * ? * MON-FRI
     on MON thru FRI every 10 minutes         => 0 0/10 * ? * MON-FRI
     on SUN,TUE,THU,FRI every 10 minutes      => 0 0/10 * ? * SUN,TUE,THU,FRI
+    at 10 pm on MON-FRI                      => 0 0 22 * ? * MON-FRI
+    on WED at 23:00                          => 0 0 23 * ? * WED
 
 
 Example bean configuration:

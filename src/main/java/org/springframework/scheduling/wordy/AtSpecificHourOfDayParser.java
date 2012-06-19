@@ -27,12 +27,13 @@ public class AtSpecificHourOfDayParser implements WordyToCronEvaluator {
         String hour = "0";
 
         boolean foundMatch = false;
-        Matcher matcher = AT_HOUR_PATTERN.matcher(wordyExpression);
+        String cleanedExpression = wordyExpression.trim().replaceAll("\\s{2,}", " ");
+        Matcher matcher = AT_HOUR_PATTERN.matcher(cleanedExpression);
         if (matcher.find()) {
             hour = adjustHours(matcher.group(1), matcher.group(2));
             foundMatch = true;
         } else {
-            matcher = AT_TIME_PATTERN.matcher(wordyExpression);
+            matcher = AT_TIME_PATTERN.matcher(cleanedExpression);
             if (matcher.find()) {
                 hour = matcher.group(1);
                 minutes = matcher.group(2).replaceAll("0([0-9])", "$1");
@@ -50,7 +51,7 @@ public class AtSpecificHourOfDayParser implements WordyToCronEvaluator {
         if (foundMatch) {
             if (minutes.length() == 3) {
                 throw new BadWordyExpressionException("The minutes can not be 3 digits");
-            } else if (wordyExpression.toLowerCase().contains("every")) {
+            } else if (cleanedExpression.toLowerCase().contains("every")) {
                 throw new BadWordyExpressionException("The 'at' syntax does not allow an 'every' definition.");
             }
             cron.second("0").minute(minutes).hour(hour);

@@ -14,7 +14,6 @@
 
 package org.springframework.scheduling.wordy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.quartz.CronExpression;
 
@@ -271,7 +270,6 @@ public class WordyExpressionTest {
     }
 
     @Test
-    @Ignore("Need to support")
     public void atExpression_shouldNotCareAboutWhiteSpace_WithMinutes() {
         assertEquals("0 10 13 * * ?", wordyToCron("  at   1:10   pm  "));
     }

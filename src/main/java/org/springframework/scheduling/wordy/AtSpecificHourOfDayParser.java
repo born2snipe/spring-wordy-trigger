@@ -17,23 +17,20 @@ package org.springframework.scheduling.wordy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AtSpecificHourOfDayParser implements WordyToCronParser {
+public class AtSpecificHourOfDayParser implements WordyToCronEvaluator {
     private static final Pattern AT_TIME_PATTERN = Pattern.compile("^at ([0-9]{1,2}):([0-9]{2})( (am|pm))?$", Pattern.CASE_INSENSITIVE);
     private static final Pattern AT_HOUR_PATTERN = Pattern.compile("at ([0-9]{1,2}) (am|pm)", Pattern.CASE_INSENSITIVE);
 
 
-    public boolean isMatch(String wordyExpression) {
-        return AT_HOUR_PATTERN.matcher(wordyExpression).find()
-                || AT_TIME_PATTERN.matcher(wordyExpression).find();
-    }
-
-    public String parse(String wordyExpression) {
+    public void evaluate(String wordyExpression, CronBuilder cron) {
         String minutes = "0";
         String hour = "0";
 
+        boolean foundMatch = false;
         Matcher matcher = AT_HOUR_PATTERN.matcher(wordyExpression);
         if (matcher.find()) {
             hour = adjustHours(matcher.group(1), matcher.group(2));
+            foundMatch = true;
         } else {
             matcher = AT_TIME_PATTERN.matcher(wordyExpression);
             if (matcher.find()) {
@@ -42,20 +39,22 @@ public class AtSpecificHourOfDayParser implements WordyToCronParser {
                 String sideOfDayStr = matcher.group(4);
 
                 if (Integer.parseInt(hour) > 12 && sideOfDayStr != null) {
-                    throw new IllegalArgumentException("Please do not provide AM or PM when using military time");
+                    throw new BadWordyExpressionException("Please do not provide AM or PM when using military time");
                 }
 
                 hour = adjustHours(hour, sideOfDayStr);
+                foundMatch = true;
             }
         }
 
-        if (minutes.length() == 3) {
-            throw new IllegalArgumentException("The minutes can not be 3 digits");
+        if (foundMatch) {
+            if (minutes.length() == 3) {
+                throw new BadWordyExpressionException("The minutes can not be 3 digits");
+            } else if (wordyExpression.toLowerCase().contains("every")) {
+                throw new BadWordyExpressionException("The 'at' syntax does not allow an 'every' definition.");
+            }
+            cron.second("0").minute(minutes).hour(hour);
         }
-
-        CronBuilder cron = new CronBuilder();
-        cron.second("0").minute(minutes).hour(hour);
-        return cron.toString();
     }
 
     private String adjustHours(String hour, String sideOfDayStr) {
@@ -67,5 +66,4 @@ public class AtSpecificHourOfDayParser implements WordyToCronParser {
         SideOfDay sideOfDay = SideOfDay.valueOf(sideOfDayStr.toUpperCase());
         return String.valueOf(sideOfDay.convertToMilitaryHours(hours));
     }
-
 }

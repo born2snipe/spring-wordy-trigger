@@ -18,6 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static org.springframework.scheduling.wordy.TimeUnit.*;
 
 public class CronBuilderTest {
 
@@ -29,39 +32,66 @@ public class CronBuilderTest {
     }
 
     @Test
+    public void isSet_shouldReturnFalseIfTheValueIsNotSet_second() {
+        assertFalse(builder.isSet(SECOND));
+    }
+
+    @Test
+    public void isSet_shouldReturnTrueIfTheValueWasSet_second() {
+        builder.value("1", SECOND);
+        assertTrue(builder.isSet(SECOND));
+    }
+
+    @Test
+    public void isSet_shouldReturnFalseIfTheValueIsNotSet_minute() {
+        assertFalse(builder.isSet(MINUTE));
+    }
+
+    @Test
+    public void isSet_shouldReturnTrueIfTheValueWasSet_minute() {
+        builder.value("1", MINUTE);
+        assertTrue(builder.isSet(MINUTE));
+    }
+
+    @Test
+    public void isSet_shouldReturnFalseIfTheValueIsNotSet_hour() {
+        assertFalse(builder.isSet(HOUR));
+    }
+
+    @Test
+    public void isSet_shouldReturnTrueIfTheValueWasSet_hour() {
+        builder.value("1", HOUR);
+        assertTrue(builder.isSet(HOUR));
+    }
+
+    @Test
     public void shouldAllowSpecifyingAnIntervalForAHour() {
-        assertEquals("* * 1/3 * * ?", builder.hour("1").interval("3").toString());
+        assertEquals("* * 1/3 * * ?", builder.value("1", HOUR).interval("3", HOUR).toString());
     }
 
     @Test
     public void shouldAllowSpecifyingAnIntervalForAMinute() {
-        assertEquals("* 1/13 * * * ?", builder.minute("1").interval("13").toString());
+        assertEquals("* 1/13 * * * ?", builder.value("1", MINUTE).interval("13", MINUTE).toString());
     }
 
     @Test
     public void shouldAllowSpecifyingAnIntervalForASecond() {
-        assertEquals("10/1 * * * * ?", builder.second("10").interval("1").toString());
+        assertEquals("10/1 * * * * ?", builder.value("10", SECOND).interval("1", SECOND).toString());
     }
 
     @Test
     public void shouldAllowSpecifyingTheExactHour() {
-        assertEquals("* * 1 * * ?", builder.hour("1").toString());
+        assertEquals("* * 1 * * ?", builder.value("1", HOUR).toString());
     }
 
     @Test
     public void shouldAllowSpecifyingTheExactSecond() {
-        assertEquals("1 * * * * ?", builder.second("1").toString());
+        assertEquals("1 * * * * ?", builder.value("1", SECOND).toString());
     }
 
     @Test
     public void shouldAllowSpecifyingTheExactMinute() {
-        assertEquals("* 1 * * * ?", builder.minute("1").toString());
-    }
-
-
-    @Test(expected = IllegalStateException.class)
-    public void interval_shouldBlowUpIfNoUnitMethodWasInvokedPrior() {
-        builder.interval("10");
+        assertEquals("* 1 * * * ?", builder.value("1", MINUTE).toString());
     }
 
     @Test(expected = IllegalStateException.class)

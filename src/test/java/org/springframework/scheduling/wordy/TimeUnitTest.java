@@ -14,19 +14,17 @@
 
 package org.springframework.scheduling.wordy;
 
+import org.junit.Test;
+
 import java.util.Arrays;
-import java.util.Comparator;
 
-public enum TimeUnit {
-    SECOND, MINUTE, HOUR;
+import static junit.framework.Assert.assertTrue;
 
-    public static TimeUnit[] valuesReversed() {
-        TimeUnit[] temp = Arrays.copyOf(values(), values().length);
-        Arrays.sort(temp, new Comparator<TimeUnit>() {
-            public int compare(TimeUnit timeUnit, TimeUnit timeUnit1) {
-                return new Integer(timeUnit1.ordinal()).compareTo(timeUnit.ordinal());
-            }
-        });
-        return temp;
+public class TimeUnitTest {
+    @Test
+    public void valuesReversed_shouldTheValuesInReverseOrder() {
+        TimeUnit[] expectedResult = {TimeUnit.HOUR, TimeUnit.MINUTE, TimeUnit.SECOND};
+        assertTrue(Arrays.deepEquals(expectedResult, TimeUnit.valuesReversed()));
     }
+
 }

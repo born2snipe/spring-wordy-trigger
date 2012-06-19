@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WordyExpression {
-    private static final List<? extends WordyToCronParser> PARSERS = Arrays.asList(
+    private static final List<? extends WordyToCronEvaluator> EVALUATORS = Arrays.asList(
             new BetweenTimeParser(),
             new EverySoOftenParser(),
             new AtSpecificHourOfDayParser()
@@ -32,15 +32,13 @@ public class WordyExpression {
 
     public String toCron() {
         try {
-            String cronExpression = "";
+            CronBuilder cronBuilder = new CronBuilder();
 
-            for (WordyToCronParser parser : PARSERS) {
-                if (parser.isMatch(expression)) {
-                    cronExpression = parser.parse(expression);
-                    break;
-                }
+            for (WordyToCronEvaluator evaluator : EVALUATORS) {
+                evaluator.evaluate(expression, cronBuilder);
             }
 
+            String cronExpression = cronBuilder.toString();
             if (cronExpression.trim().length() == 0) {
                 throw new IllegalStateException("Could not convert the wordy expression to a valid CRON expression");
             }

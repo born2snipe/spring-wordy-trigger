@@ -16,71 +16,105 @@ package org.springframework.scheduling.wordy;
 
 
 public class CronBuilder {
+    public static final String DEFAULT_VALUE = "*";
     private boolean initialized = false;
     private String secondValue, minuteValue, hourValue;
-    private TimeUnit currentUnit;
+    private String secondIntervalValue, minuteIntervalValue, hourIntervalValue;
 
     @Override
     public String toString() {
-        if (secondValue == null || minuteValue == null || hourValue == null)
+        if (!initialized)
             throw new IllegalStateException("Please set something on the builder");
 
         StringBuilder cron = new StringBuilder();
-        cron.append(secondValue).append(" ");
-        cron.append(minuteValue).append(" ");
-        cron.append(hourValue).append(" ");
+        appendValue(cron, secondValue, secondIntervalValue);
+        appendValue(cron, minuteValue, minuteIntervalValue);
+        appendValue(cron, hourValue, hourIntervalValue);
         cron.append("* * ?");
 
         return cron.toString();
     }
 
+    private void appendValue(StringBuilder cron, String value, String intervalValue) {
+        cron.append(value);
+        if (intervalValue.length() > 0) {
+            cron.append("/").append(intervalValue);
+        }
+        cron.append(" ");
+    }
+
     public CronBuilder minute(String value) {
         initialize();
-        currentUnit = TimeUnit.MINUTE;
         minuteValue = value;
         return this;
     }
 
     public CronBuilder second(String value) {
         initialize();
-        currentUnit = TimeUnit.SECOND;
         secondValue = value;
         return this;
     }
 
     public CronBuilder hour(String value) {
         initialize();
-        currentUnit = TimeUnit.HOUR;
         hourValue = value;
         return this;
     }
 
-    public CronBuilder interval(String intervalValue) {
-        if (currentUnit == null) {
-            throw new IllegalStateException("Please invoke a time unit method first");
-        }
-
-        String interval = "/" + intervalValue;
-        switch (currentUnit) {
+    public CronBuilder value(String value, TimeUnit timeUnit) {
+        initialize();
+        switch (timeUnit) {
             case HOUR:
-                hourValue += interval;
+                hourValue = value;
                 break;
             case MINUTE:
-                minuteValue += interval;
+                minuteValue = value;
                 break;
             case SECOND:
-                secondValue += interval;
+                secondValue = value;
                 break;
         }
         return this;
     }
 
+    public CronBuilder interval(String value, TimeUnit timeUnit) {
+        switch (timeUnit) {
+            case HOUR:
+                hourIntervalValue = value;
+                break;
+            case MINUTE:
+                minuteIntervalValue = value;
+                break;
+            case SECOND:
+                secondIntervalValue = value;
+                break;
+        }
+        return this;
+    }
+
+    public boolean isSet(TimeUnit timeUnit) {
+        switch (timeUnit) {
+            case SECOND:
+                return wasSet(secondValue);
+            case MINUTE:
+                return wasSet(minuteValue);
+        }
+        return wasSet(hourValue);
+    }
+
     private void initialize() {
         if (!initialized) {
-            secondValue = "*";
-            minuteValue = "*";
-            hourValue = "*";
+            secondValue = DEFAULT_VALUE;
+            minuteValue = DEFAULT_VALUE;
+            hourValue = DEFAULT_VALUE;
+            secondIntervalValue = "";
+            minuteIntervalValue = "";
+            hourIntervalValue = "";
             initialized = true;
         }
+    }
+
+    private boolean wasSet(String value) {
+        return !DEFAULT_VALUE.equals(value) && value != null;
     }
 }

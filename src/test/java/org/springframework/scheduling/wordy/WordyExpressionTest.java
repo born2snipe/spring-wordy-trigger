@@ -29,6 +29,11 @@ public class WordyExpressionTest {
     }
 
     @Test
+    public void betweenExpression_shouldNotCareWhatSideTheEveryExpressionIsOn() {
+        assertEquals("0 0/1 12-22 * * ?", wordyToCron("every 1 minute between 12 pm and 10 pm"));
+    }
+
+    @Test
     public void betweenExpression_shouldSupportNightHourRanges() {
         assertEquals("0 0/1 12-22 * * ?", wordyToCron("between 12 pm and 10 pm every 1 minute"));
     }
@@ -146,6 +151,11 @@ public class WordyExpressionTest {
     @Test(expected = BadWordyExpressionException.class)
     public void everyExpression_shouldBlowUpIfABadExpressionIsGiven() {
         wordyToCron("every xx hour");
+    }
+
+    @Test(expected = BadWordyExpressionException.class)
+    public void atExpression_shouldBlowUpIfAnEveryExpressionIsGiven() {
+        wordyToCron("at 1 am every 1 minute");
     }
 
     @Test

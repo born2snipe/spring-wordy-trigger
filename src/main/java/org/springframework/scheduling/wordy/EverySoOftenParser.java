@@ -17,38 +17,24 @@ package org.springframework.scheduling.wordy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EverySoOftenParser implements WordyToCronParser {
+public class EverySoOftenParser implements WordyToCronEvaluator {
     private static final Pattern EVERY_PATTERN = Pattern.compile("every ([0-9]+) (hour|minute|second)", Pattern.CASE_INSENSITIVE);
 
-    public boolean isMatch(String wordyExpression) {
-        return EVERY_PATTERN.matcher(wordyExpression).find();
-    }
-
-    public String parse(String wordyExpression) {
-        CronBuilder cron = new CronBuilder();
+    public void evaluate(String wordyExpression, CronBuilder cron) {
         Matcher matcher = EVERY_PATTERN.matcher(wordyExpression);
         if (matcher.find()) {
             String unitSize = matcher.group(1);
             TimeUnit unit = TimeUnit.valueOf(matcher.group(2).toUpperCase());
 
-            cron.second("0");
-            if (unit == TimeUnit.SECOND) {
-                cron.interval(unitSize);
-            } else {
-                cron.minute("0");
-                if (unit == TimeUnit.MINUTE) {
-                    cron.interval(unitSize);
-                } else {
-                    cron.hour("0");
-                    if (unit == TimeUnit.HOUR) {
-                        cron.interval(unitSize);
-                    }
+            if (!cron.isSet(unit)) {
+                cron.value("0", unit);
+            }
+            cron.interval(unitSize, unit);
+            for (TimeUnit timeUnit : TimeUnit.valuesReversed()) {
+                if (timeUnit.ordinal() < unit.ordinal()) {
+                    cron.value("0", timeUnit);
                 }
             }
-
         }
-        return cron.toString();
-
     }
-
 }

@@ -14,8 +14,6 @@
 
 package org.springframework.scheduling.wordy;
 
-public interface WordyToCronParser {
-    boolean isMatch(String wordyExpression);
-
-    String parse(String wordyExpression);
+public interface WordyToCronEvaluator {
+    void evaluate(String wordyExpression, CronBuilder cron);
 }

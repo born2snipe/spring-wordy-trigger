@@ -1,6 +1,6 @@
 Attempt to simplify setting up a timer trigger using just words.
 
-Spring Docs: http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
+Spring Docs for setting up a scheduled task: http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
 
 Example expressions:
 
@@ -16,6 +16,7 @@ Example expressions:
     between 0 and 10 every 10 minutes      => 0 0/10 0-10 * * ?
     between 1 am and 10 pm every 5 minutes => 0 0/5 1-22 * * ?
     between 1-10 pm every 2 hours          => 0 0 13-10/2 * * ?
+    every 2 hours between 1-10 pm          => 0 0 13-10/2 * * ?
 
 
 Example bean configuration:

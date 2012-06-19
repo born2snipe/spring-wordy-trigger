@@ -14,12 +14,38 @@
 
 package org.springframework.scheduling.wordy;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class BadWordyExpressionException extends RuntimeException {
     public BadWordyExpressionException(String wordyExpression) {
         this(wordyExpression, null);
     }
 
     public BadWordyExpressionException(String wordyExpression, Throwable cause) {
-        super("A problem occurred when trying to parse the following wordy expression [" + wordyExpression + "]", cause);
+        super("Problem: A problem occurred when trying to parse the following wordy expression [" + wordyExpression + "]\n\nInformation:\n" + readReadMeFile() + "\n\n", cause);
+    }
+
+    private static String readReadMeFile() {
+        StringBuilder builder = new StringBuilder();
+
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("org/springframework/scheduling/wordy/README.txt");
+        byte[] buffer = new byte[1024];
+        int len = -1;
+
+        try {
+            while ((len = input.read(buffer)) != -1) {
+                builder.append(new String(buffer, 0, len));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("A problem occurred while trying to read the README.txt file for friendlier exception messages");
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+            }
+        }
+
+        return builder.toString();
     }
 }

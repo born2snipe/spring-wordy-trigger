@@ -73,6 +73,16 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>README.txt</include>
+                </includes>
+                <targetPath>org/springframework/scheduling/wordy</targetPath>
+            </resource>
+        </resources>
+
         <plugins>
 
             <plugin>

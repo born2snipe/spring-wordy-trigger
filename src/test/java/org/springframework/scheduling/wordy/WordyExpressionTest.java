@@ -19,7 +19,7 @@ import org.quartz.CronExpression;
 
 import java.text.ParseException;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 
 public class WordyExpressionTest {
 
@@ -257,6 +257,16 @@ public class WordyExpressionTest {
     @Test(expected = BadWordyExpressionException.class)
     public void atExpression_shouldBlowUpWhenGivenA3DigitMinuteValue() {
         wordyToCron("at 11:221 pm");
+    }
+
+    @Test
+    public void shouldContainTheReadMeFileContentsWhenAnExceptionHappens() {
+        try {
+            wordyToCron("at 11:221 pm");
+            fail();
+        } catch (BadWordyExpressionException e) {
+            assertTrue(e.getMessage().contains("Example expressions:"));
+        }
     }
 
     @Test

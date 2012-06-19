@@ -24,6 +24,42 @@ import static junit.framework.Assert.*;
 public class WordyExpressionTest {
 
     @Test
+    public void shouldHandleACombinationOfExpressions_on_at() {
+        String[] expressions = {
+                "on MON-FRI at 10 pm",
+                "on MON thru FRI at 10 pm",
+                "at 10 pm on MON thru FRI",
+                "at 10 pm on MON-FRI",
+        };
+
+        for (String expression : expressions) {
+            assertEquals("0 0 22 ? * MON-FRI", wordyToCron(expression));
+        }
+    }
+
+    @Test
+    public void shouldHandleACombinationOfExpressions_on_every_between() {
+        String[] expressions = {
+                "on MON-FRI between 12 am and 10 pm every 10 minutes",
+                "on MON thru FRI between 12 am and 10 pm every 10 minutes",
+                "on MON-FRI every 10 minutes between 12 am and 10 pm ",
+                "on MON thru FRI every 10 minutes between 12 am and 10 pm ",
+                "between 12 am and 10 pm on MON-FRI every 10 minutes",
+                "between 12 am and 10 pm on MON thru FRI every 10 minutes",
+                "between 12 am and 10 pm every 10 minutes on MON-FRI ",
+                "between 12 am and 10 pm every 10 minutes on MON thru FRI ",
+                "every 10 minutes between 12 am and 10 pm on MON-FRI",
+                "every 10 minutes between 12 am and 10 pm on MON thru FRI",
+                "every 10 minutes on MON thru FRI between 12 am and 10 pm",
+                "every 10 minutes on MON - FRI between 12 am and 10 pm"
+        };
+
+        for (String expression : expressions) {
+            assertEquals("0 0/10 0-22 ? * MON-FRI", wordyToCron(expression));
+        }
+    }
+
+    @Test
     public void onExpression_shouldHandleWhiteSpaceInExpression() {
         assertEquals("0 0 22 ? * MON", wordyToCron("on   MON   at 10 pm"));
     }

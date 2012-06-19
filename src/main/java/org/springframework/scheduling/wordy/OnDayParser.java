@@ -18,20 +18,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OnDayParser implements WordyToCronEvaluator {
-    private static final Pattern PATTERN = Pattern.compile("(^on (.+?) (at|every))|(.+ on (.+$))", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("(^on (.+?) (between|every|at))|((.+) on (.+) (every|between))|((.+) on (.+)($))", Pattern.CASE_INSENSITIVE);
 
     public void evaluate(String wordyExpression, CronBuilder cron) {
-        Matcher matcher = PATTERN.matcher(wordyExpression.trim());
+        Matcher matcher = PATTERN.matcher(wordyExpression.trim().replaceAll("\\s{2,}", " "));
         if (matcher.find()) {
             if (isValidOnDayExpression(wordyExpression)) {
                 throw new BadWordyExpressionException("The 'on' syntax requires a 'every' or an 'at' definition");
             }
 
-            String dayValue = matcher.group(2);
-            if (dayValue == null) {
-                dayValue = matcher.group(5);
+            String dayValue = null;
+            int[] groupsToCheck = {2, 6, 10};
+            for (int group : groupsToCheck) {
+                dayValue = matcher.group(group);
+                if (dayValue != null)
+                    break;
             }
-
             String cleanedValue = cleanTheDayValue(dayValue);
             cron.value(cleanedValue, TimeUnit.DAY_OF_WEEK);
         }

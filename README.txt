@@ -4,26 +4,26 @@ Spring Docs for setting up a scheduled task: http://static.springsource.org/spri
 
 Example expressions:
 
-    Wordy Exp.                                 Cron Exp.
-    ================                          ==================
-    every 10 minutes                         => 0 0/10 * * * ?
-    every 5 seconds                          => 0/5 * * * * ?
-    at 10 pm                                 => 0 0 22 * * ?
-    at 12:00 am                              => 0 0 0 * * ?
-    at 12:00 pm                              => 0 0 12 * * ?
-    at 23:43                                 => 0 43 23 * * ?
-    between 0-10 every 10 minutes            => 0 0/10 0-10 * * ?
-    between 0 and 10 every 10 minutes        => 0 0/10 0-10 * * ?
-    between 1 am and 10 pm every 5 minutes   => 0 0/5 1-22 * * ?
-    between 1-10 pm every 2 hours            => 0 0 13-10/2 * * ?
-    every 2 hours between 1-10 pm            => 0 0 13-10/2 * * ?
-    on MON-FRI every 10 minutes              => 0 0/10 * ? * MON-FRI
-    every 10 minutes on MON-FRI              => 0 0/10 * ? * MON-FRI
-    on MON thru FRI every 10 minutes         => 0 0/10 * ? * MON-FRI
-    on SUN,TUE,THU,FRI every 10 minutes      => 0 0/10 * ? * SUN,TUE,THU,FRI
-    at 10 pm on MON-FRI                      => 0 0 22 * ? * MON-FRI
-    on WED at 23:00                          => 0 0 23 * ? * WED
-
+    Wordy Exp.                                              Cron Exp.
+    ================                                       ==================
+    every 10 minutes                                    => 0 0/10 * * * ?
+    every 5 seconds                                     => 0/5 * * * * ?
+    at 10 pm                                            => 0 0 22 * * ?
+    at 12:00 am                                         => 0 0 0 * * ?
+    at 12:00 pm                                         => 0 0 12 * * ?
+    at 23:43                                            => 0 43 23 * * ?
+    between 0-10 every 10 minutes                       => 0 0/10 0-10 * * ?
+    between 0 and 10 every 10 minutes                   => 0 0/10 0-10 * * ?
+    between 1 am and 10 pm every 5 minutes              => 0 0/5 1-22 * * ?
+    between 1-10 pm every 2 hours                       => 0 0 13-10/2 * * ?
+    every 2 hours between 1-10 pm                       => 0 0 13-10/2 * * ?
+    on MON-FRI every 10 minutes                         => 0 0/10 * ? * MON-FRI
+    every 10 minutes on MON-FRI                         => 0 0/10 * ? * MON-FRI
+    on MON thru FRI every 10 minutes                    => 0 0/10 * ? * MON-FRI
+    on SUN,TUE,THU,FRI every 10 minutes                 => 0 0/10 * ? * SUN,TUE,THU,FRI
+    at 10 pm on MON-FRI                                 => 0 0 22 * ? * MON-FRI
+    on WED at 23:00                                     => 0 0 23 * ? * WED
+    on MON-FRI between 12 am and 10 pm every 10 minutes => 0 0/10 0-22 ? * MON-FRI
 
 Example bean configuration:
 

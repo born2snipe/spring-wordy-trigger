@@ -60,6 +60,22 @@ public class WordyExpressionTest {
     }
 
     @Test
+    public void shouldHandleACombinationOfExpressions_on_every_between_withListOfDays() {
+        String[] expressions = {
+                "on MON, TUE, FRI between 12 am and 10 pm every 10 minutes",
+                "on MON, TUE, FRI every 10 minutes between 12 am and 10 pm ",
+                "between 12 am and 10 pm on MON, TUE, FRI every 10 minutes",
+                "between 12 am and 10 pm every 10 minutes on MON, TUE, FRI",
+                "every 10 minutes between 12 am and 10 pm on MON, TUE, FRI",
+                "every 10 minutes on MON, TUE, FRI between 12 am and 10 pm",
+        };
+
+        for (String expression : expressions) {
+            assertEquals("0 0/10 0-22 ? * MON,TUE,FRI", wordyToCron(expression));
+        }
+    }
+
+    @Test
     public void onExpression_shouldHandleWhiteSpaceInExpression() {
         assertEquals("0 0 22 ? * MON", wordyToCron("on   MON   at 10 pm"));
     }

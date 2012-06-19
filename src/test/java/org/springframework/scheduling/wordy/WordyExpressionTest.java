@@ -14,6 +14,7 @@
 
 package org.springframework.scheduling.wordy;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.quartz.CronExpression;
 
@@ -22,6 +23,61 @@ import java.text.ParseException;
 import static junit.framework.Assert.assertEquals;
 
 public class WordyExpressionTest {
+
+    @Test
+    public void onExpression_shouldHandleWhiteSpaceInExpression() {
+        assertEquals("0 0 22 ? * MON", wordyToCron("on   MON   at 10 pm"));
+    }
+
+    @Test
+    public void onExpression_shouldHandleWhiteSpaceOnTheEnds() {
+        assertEquals("0 0 22 ? * MON", wordyToCron("  on MON at 10 pm  "));
+    }
+
+    @Test
+    public void onExpression_shouldNotCareAboutCase() {
+        assertEquals("0 0 22 ? * MON", wordyToCron("ON mon AT 10 pm"));
+    }
+
+    @Test
+    public void onExpression_shouldAllowASingleDayAsAValue() {
+        assertEquals("0 0 22 ? * MON", wordyToCron("on MON at 10 pm"));
+    }
+
+    @Test
+    public void onExpression_shouldAllow_at_ToPrecedeTheOnExpression() {
+        assertEquals("0 0 22 ? * MON-FRI", wordyToCron("at 10 pm on MON-FRI"));
+    }
+
+    @Test
+    public void onExpression_shouldAllow_every_ToPrecedeTheOnExpression() {
+        assertEquals("0 0/10 * ? * MON-FRI", wordyToCron("every 10 minutes on MON-FRI"));
+    }
+
+    @Test
+    public void onExpression_shouldAllowTheWord_thru_asADividerOfDays() {
+        assertEquals("0 0/10 * ? * MON-FRI", wordyToCron("on MON thru FRI every 10 minutes"));
+    }
+
+    @Test(expected = BadWordyExpressionException.class)
+    public void onExpression_shouldBlowUpIfNo_at_or_every_definitionIsProvided() {
+        wordyToCron("on MON-FRI");
+    }
+
+    @Test
+    public void onExpression_shouldAllowWhiteSpaceBetweenDayListElements() {
+        assertEquals("0 0/10 * ? * MON,WED,FRI", wordyToCron("on MON, WED, FRI every 10 minutes"));
+    }
+
+    @Test
+    public void onExpression_shouldAllowTheQuartzDefaultsForDaysOfTheWeekListInAliasFormat() {
+        assertEquals("0 0/10 * ? * MON,WED,FRI", wordyToCron("on MON,WED,FRI every 10 minutes"));
+    }
+
+    @Test
+    public void onExpression_shouldAllowTheQuartzDefaultsForDaysOfTheWeekRangeInAliasFormat() {
+        assertEquals("0 0/10 * ? * MON-FRI", wordyToCron("on MON-FRI every 10 minutes"));
+    }
 
     @Test(expected = BadWordyExpressionException.class)
     public void betweenExpression_shouldBlowUpIfTheFirstHourHasTheSideOfDayButTheSecondHourDoesNot() {
@@ -209,16 +265,28 @@ public class WordyExpressionTest {
         assertEquals("0 0 13 * * ?", wordyToCron("AT 1 pM"));
     }
 
+    @Test
+    public void atExpression_shouldNotCareAboutWhiteSpace_NoMinutes() {
+        assertEquals("0 0 13 * * ?", wordyToCron("  at   1   pm  "));
+    }
+
+    @Test
+    @Ignore("Need to support")
+    public void atExpression_shouldNotCareAboutWhiteSpace_WithMinutes() {
+        assertEquals("0 10 13 * * ?", wordyToCron("  at   1:10   pm  "));
+    }
+
     @Test(expected = BadWordyExpressionException.class)
     public void atExpression_shouldBlowUpIfA3DigitHourIsGiven() {
         wordyToCron("at 111 pm");
     }
 
     private String wordyToCron(String expression) {
+        String cronExpression = new WordyExpression(expression).toCron();
         try {
-            return new CronExpression(new WordyExpression(expression).toCron()).toString();
+            return new CronExpression(cronExpression).toString();
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Given cron was: [" + cronExpression + "]", e);
         }
     }
 

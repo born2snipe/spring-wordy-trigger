@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertTrue;
 public class TimeUnitTest {
     @Test
     public void valuesReversed_shouldTheValuesInReverseOrder() {
-        TimeUnit[] expectedResult = {TimeUnit.HOUR, TimeUnit.MINUTE, TimeUnit.SECOND};
+        TimeUnit[] expectedResult = {TimeUnit.DAY_OF_WEEK, TimeUnit.HOUR, TimeUnit.MINUTE, TimeUnit.SECOND};
         assertTrue(Arrays.deepEquals(expectedResult, TimeUnit.valuesReversed()));
     }
 

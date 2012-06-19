@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public enum TimeUnit {
-    SECOND, MINUTE, HOUR;
+    SECOND, MINUTE, HOUR, DAY_OF_WEEK;
 
     public static TimeUnit[] valuesReversed() {
         TimeUnit[] temp = Arrays.copyOf(values(), values().length);

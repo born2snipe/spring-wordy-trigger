@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class AtSpecificHourOfDayParser implements WordyToCronEvaluator {
     private static final Pattern AT_TIME_PATTERN = Pattern.compile("^at ([0-9]{1,2}):([0-9]{2})( (am|pm))?$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern AT_HOUR_PATTERN = Pattern.compile("at ([0-9]{1,2}) (am|pm)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern AT_HOUR_PATTERN = Pattern.compile("at\\s+([0-9]{1,2})\\s+(am|pm)", Pattern.CASE_INSENSITIVE);
 
 
     public void evaluate(String wordyExpression, CronBuilder cron) {

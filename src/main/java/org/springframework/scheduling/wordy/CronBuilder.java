@@ -18,7 +18,7 @@ package org.springframework.scheduling.wordy;
 public class CronBuilder {
     public static final String DEFAULT_VALUE = "*";
     private boolean initialized = false;
-    private String secondValue, minuteValue, hourValue;
+    private String secondValue, minuteValue, hourValue, dayOfWeekValue;
     private String secondIntervalValue, minuteIntervalValue, hourIntervalValue;
 
     @Override
@@ -30,7 +30,15 @@ public class CronBuilder {
         appendValue(cron, secondValue, secondIntervalValue);
         appendValue(cron, minuteValue, minuteIntervalValue);
         appendValue(cron, hourValue, hourIntervalValue);
-        cron.append("* * ?");
+
+        if (isSet(TimeUnit.DAY_OF_WEEK)) {
+            cron.append("? ");
+        } else {
+            cron.append("* ");
+        }
+
+        cron.append("* ");
+        cron.append(dayOfWeekValue);
 
         return cron.toString();
     }
@@ -64,6 +72,9 @@ public class CronBuilder {
     public CronBuilder value(String value, TimeUnit timeUnit) {
         initialize();
         switch (timeUnit) {
+            case DAY_OF_WEEK:
+                dayOfWeekValue = value;
+                break;
             case HOUR:
                 hourValue = value;
                 break;
@@ -98,8 +109,10 @@ public class CronBuilder {
                 return wasSet(secondValue);
             case MINUTE:
                 return wasSet(minuteValue);
+            case HOUR:
+                return wasSet(hourValue);
         }
-        return wasSet(hourValue);
+        return dayOfWeekValue != null && !dayOfWeekValue.equals("?");
     }
 
     private void initialize() {
@@ -107,6 +120,7 @@ public class CronBuilder {
             secondValue = DEFAULT_VALUE;
             minuteValue = DEFAULT_VALUE;
             hourValue = DEFAULT_VALUE;
+            dayOfWeekValue = "?";
             secondIntervalValue = "";
             minuteIntervalValue = "";
             hourIntervalValue = "";

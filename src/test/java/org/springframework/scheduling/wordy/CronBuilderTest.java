@@ -17,9 +17,7 @@ package org.springframework.scheduling.wordy;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.springframework.scheduling.wordy.TimeUnit.*;
 
 public class CronBuilderTest {
@@ -29,6 +27,23 @@ public class CronBuilderTest {
     @Before
     public void setUp() throws Exception {
         builder = new CronBuilder();
+    }
+
+    @Test
+    public void isSet_shouldReturnFalseIfTheValueIsNotSet_dayOfWeek() {
+        assertFalse(builder.isSet(DAY_OF_WEEK));
+    }
+
+    @Test
+    public void isSet_shouldReturnTrueIfTheValueWasSet_dayOfWeek() {
+        builder.value("1", DAY_OF_WEEK);
+        assertTrue(builder.isSet(DAY_OF_WEEK));
+    }
+
+    @Test
+    public void isSet_shouldReturnFalseIfTheValueWasSetToAQuestionMark_dayOfWeek() {
+        builder.value("?", DAY_OF_WEEK);
+        assertFalse(builder.isSet(DAY_OF_WEEK));
     }
 
     @Test
@@ -62,6 +77,11 @@ public class CronBuilderTest {
     public void isSet_shouldReturnTrueIfTheValueWasSet_hour() {
         builder.value("1", HOUR);
         assertTrue(builder.isSet(HOUR));
+    }
+
+    @Test
+    public void shouldAllowSpecifyingAValueForDayOfWeek() {
+        assertEquals("* * * ? * 1", builder.value("1", DAY_OF_WEEK).toString());
     }
 
     @Test

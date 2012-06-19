@@ -19,6 +19,7 @@ import java.util.List;
 
 public class WordyExpression {
     private static final List<? extends WordyToCronEvaluator> EVALUATORS = Arrays.asList(
+            new OnDayParser(),
             new BetweenTimeParser(),
             new EverySoOftenParser(),
             new AtSpecificHourOfDayParser()

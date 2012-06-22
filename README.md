@@ -1,8 +1,8 @@
-[![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)
+Attempt to simplify setting up a timer trigger using just words.  To help you come up with your own wordy expression
+for your task, just answer the following question:
 
-Attempt to simplify setting up a timer trigger using just words.
+    I want this to run...
 
-Spring Docs for setting up a scheduled task: http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
 
 Example expressions:
 
@@ -50,3 +50,11 @@ Available hour ranges for "between" syntax:
 Available days for "on" syntax:
 
     SUN, MON, TUE, WED, THU, FRI, SAT
+
+
+Spring Docs for setting up a scheduled task:
+
+    http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
+
+
+[![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)

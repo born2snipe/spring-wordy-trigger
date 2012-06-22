@@ -76,7 +76,7 @@
             <resource>
                 <directory>${basedir}</directory>
                 <includes>
-                    <include>README.txt</include>
+                    <include>README.md</include>
                 </includes>
                 <targetPath>org/springframework/scheduling/wordy</targetPath>
             </resource>

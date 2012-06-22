@@ -29,7 +29,7 @@ public class BadWordyExpressionException extends RuntimeException {
     private static String readReadMeFile() {
         StringBuilder builder = new StringBuilder();
 
-        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("org/springframework/scheduling/wordy/README.txt");
+        InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("org/springframework/scheduling/wordy/README.md");
         byte[] buffer = new byte[1024];
         int len = -1;
 

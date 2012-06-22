@@ -35,15 +35,18 @@ Example bean configuration:
     </bean>
 
 Available units for the "every" syntax:
+
     second
     minute
     hour
 
 
 Available hour ranges for "between" syntax:
+
     Military time: 0-23|0 and 23
     Time of day: 1-10 pm|1 am and 10 pm
 
 
 Available days for "on" syntax:
+
     SUN, MON, TUE, WED, THU, FRI, SAT

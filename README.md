@@ -1,5 +1,5 @@
 Attempt to simplify setting up a timer trigger using just words.  To help you come up with your own wordy expression
-for your task, just answer the following question:
+for your task, just finish the following sentence:
 
     I want this to run...
 

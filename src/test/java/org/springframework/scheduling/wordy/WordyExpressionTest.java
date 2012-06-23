@@ -16,8 +16,12 @@ package org.springframework.scheduling.wordy;
 
 import org.junit.Test;
 import org.quartz.CronExpression;
+import org.springframework.scheduling.support.CronSequenceGenerator;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static junit.framework.Assert.*;
 
@@ -344,9 +348,34 @@ public class WordyExpressionTest {
     private String wordyToCron(String expression) {
         String cronExpression = new WordyExpression(expression).toCron();
         try {
-            return new CronExpression(cronExpression).toString();
+            Date now = new Date();
+            CronSequenceGenerator springCronGenerator = new CronSequenceGenerator(cronExpression, TimeZone.getDefault());
+            CronExpression quartzCronExpression = new CronExpression(cronExpression);
+            assertDatesAreSimilar(now, springCronGenerator, quartzCronExpression);
+            return quartzCronExpression.toString();
         } catch (ParseException e) {
             throw new RuntimeException("Given cron was: [" + cronExpression + "]", e);
+        }
+    }
+
+    private void assertDatesAreSimilar(Date now, CronSequenceGenerator springCronGenerator, CronExpression quartzCronExpression) {
+        Calendar springCalendar = Calendar.getInstance();
+        springCalendar.setTime(springCronGenerator.next(now));
+        Calendar quartzCalendar = Calendar.getInstance();
+        quartzCalendar.setTime(quartzCronExpression.getNextValidTimeAfter(now));
+
+        int[] itemsToCheck = {
+                Calendar.YEAR,
+                Calendar.MONTH,
+                Calendar.DAY_OF_MONTH,
+                Calendar.HOUR_OF_DAY,
+                Calendar.MINUTE,
+//                Calendar.SECOND -- this is not checked because Spring's implementation of cron rounds the seconds
+        };
+
+        for (int i = 0; i < itemsToCheck.length; i++) {
+            int fieldValue = itemsToCheck[i];
+            assertEquals(quartzCalendar.get(fieldValue), springCalendar.get(fieldValue));
         }
     }
 

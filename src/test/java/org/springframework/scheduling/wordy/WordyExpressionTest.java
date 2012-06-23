@@ -321,7 +321,7 @@ public class WordyExpressionTest {
             wordyToCron("at 11:221 pm");
             fail();
         } catch (BadWordyExpressionException e) {
-            assertTrue(e.getMessage().contains("Example expressions:"));
+            assertTrue(e.getMessage().contains("Wordy to Cron comparison"));
         }
     }
 

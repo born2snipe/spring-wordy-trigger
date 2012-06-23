@@ -11,7 +11,7 @@ for your task, just finish the following sentence:
     I want this to run...
 
 
-** Wordy to Cron comparison **
+**Wordy to Cron comparison**
 
     Wordy Exp.                                              Cron Exp.
     ================                                       ==================

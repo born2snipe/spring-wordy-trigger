@@ -61,16 +61,16 @@ Spring Docs for setting up a scheduled task:
 
 **Usage in Maven**
    
-   <dependency>
-     <groupId>b2s</groupId>
-     <artifactId>spring-wordy-trigger</artifactId>
-     <version>${version}</version>
-   </dependency>
+	<dependency>
+     		<groupId>b2s</groupId>
+     		<artifactId>spring-wordy-trigger</artifactId>
+     		<version>${version}</version>
+   	</dependency>
    
-   <repositories>
-     <repository>
-       <id>b2s-repo</id>
-       <url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
-     </repository>
-   </repositories>
+	<repositories>
+     		<repository>
+       			<id>b2s-repo</id>
+       			<url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
+     		</repository>
+   	</repositories>
    

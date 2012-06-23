@@ -1,4 +1,4 @@
-# What is this?
+# What is this?  [![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)
 
 Attempt to simplify setting up a timer trigger using just words.
 
@@ -10,6 +10,8 @@ for your task, just finish the following sentence:
 
     I want this to run...
 
+
+** Wordy to Cron comparison **
 
     Wordy Exp.                                              Cron Exp.
     ================                                       ==================
@@ -51,8 +53,6 @@ Available days for "on" syntax:
     SUN, MON, TUE, WED, THU, FRI, SAT
 
 
-
-[![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)
 
 ##Maven
    

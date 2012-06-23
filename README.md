@@ -1,10 +1,15 @@
-Attempt to simplify setting up a timer trigger using just words.  To help you come up with your own wordy expression
+# What is this?
+
+Attempt to simplify setting up a timer trigger using just words.
+
+
+##Examples
+
+To help you come up with your own wordy expression
 for your task, just finish the following sentence:
 
     I want this to run...
 
-
-Example expressions:
 
     Wordy Exp.                                              Cron Exp.
     ================                                       ==================
@@ -27,12 +32,6 @@ Example expressions:
     on WED at 23:00                                     => 0 0 23 * ? * WED
     on MON-FRI between 12 am and 10 pm every 10 minutes => 0 0/10 0-22 ? * MON-FRI
 
-Example bean configuration:
-
-     <bean id="trigger" class="org.springframework.scheduling.wordy.WordyTriggerBean">
-        <property name="expression" value="every 1 second"/>
-        <property name="jobDetail" ref="jobDetail"/>
-    </bean>
 
 Available units for the "every" syntax:
 
@@ -52,25 +51,28 @@ Available days for "on" syntax:
     SUN, MON, TUE, WED, THU, FRI, SAT
 
 
-Spring Docs for setting up a scheduled task:
-
-    http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html
-
 
 [![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)
 
-**Usage in Maven**
+##Maven
    
 	<dependency>
-     		<groupId>b2s</groupId>
-     		<artifactId>spring-wordy-trigger</artifactId>
-     		<version>${version}</version>
+      <groupId>b2s</groupId>
+      <artifactId>spring-wordy-trigger</artifactId>
+       <version>${version}</version>
    	</dependency>
    
 	<repositories>
-     		<repository>
-       			<id>b2s-repo</id>
-       			<url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
-     		</repository>
+      <repository>
+        <id>b2s-repo</id>
+        <url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
+      </repository>
    	</repositories>
-   
+
+
+##[Spring Usage](http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/scheduling.html)
+
+     <bean id="trigger" class="org.springframework.scheduling.wordy.WordyTriggerBean">
+        <property name="expression" value="every 1 second"/>
+        <property name="jobDetail" ref="jobDetail"/>
+    </bean>

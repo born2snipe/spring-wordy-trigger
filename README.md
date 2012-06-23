@@ -58,3 +58,20 @@ Spring Docs for setting up a scheduled task:
 
 
 [![Build Status](https://secure.travis-ci.org/born2snipe/spring-wordy-trigger.png)](http://travis-ci.org/born2snipe/spring-wordy-trigger)
+
+Usage in Maven:
+   
+   ...
+   <dependency>
+     <groupId>b2s</groupId>
+     <artifactId>spring-wordy-trigger</artifactId>
+     <version>${version}</version>
+   </dependency>
+   ...
+   <repositories>
+     <repository>
+       <id>b2s-repo</id>
+       <url>http://b2s-repo.googlecode.com/svn/trunk/mvn-repo</url>
+     </repository>
+   </repositories>
+   

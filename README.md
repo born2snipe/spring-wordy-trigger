@@ -56,11 +56,11 @@ Available days for "on" syntax:
 
 ##Maven
 
-   <dependency>
-     <groupId>b2s</groupId>
-     <artifactId>wordy</artifactId>
-     <version>${version}</version>
-   </dependency>
+    <dependency>
+      <groupId>b2s</groupId>
+      <artifactId>wordy</artifactId>
+      <version>${version}</version>
+    </dependency>
 
 	<dependency>
       <groupId>b2s</groupId>
